@@ -1,6 +1,6 @@
 {
   "name": "@alexmakeev/nuxt-directus-next",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -46,7 +46,7 @@
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "docs": "cd docs && npm run dev",
-    "release": "nuxt-module-build build && npm publish",
+    "release": "npm version patch --force && npm publish",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
