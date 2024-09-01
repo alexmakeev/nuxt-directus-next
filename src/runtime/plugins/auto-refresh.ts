@@ -10,6 +10,7 @@ import {
 } from '#imports'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
+  console.log('Defining Nuxt-Directus Plugin')
   const {
     url: baseURL,
     authConfig: {
@@ -81,9 +82,11 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     })
   }
 
+  console.log({enableMiddleware, toArray});
   if (enableMiddleware) {
     addRouteMiddleware(middlewareName, (to, _from) => {
-      const restricted = (!toArray.length || !!toArray.find((p: string) => p === to.path))
+      console.log(toArray, to.path);
+      const restricted = !toArray.length || !toArray.find((p) => to.path.indexOf(p) !== -1);
 
       if (!user.value && to.path !== redirectTo && restricted) {
         if (import.meta.client && !nuxtApp.isHydrating) {

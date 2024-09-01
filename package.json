@@ -1,8 +1,11 @@
 {
-  "name": "nuxt-directus-next",
-  "version": "0.0.15",
+  "name": "@alexmakeev/nuxt-directus-next",
+  "version": "0.0.16",
   "license": "MIT",
-  "repository": "https://github.com/Intevel/nuxt-directus/tree/dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexmakeev/nuxt-directus-next.git"
+  },
   "homepage": "https://next.nuxt-directus.site/",
   "type": "module",
   "author": {
@@ -16,6 +19,9 @@
       "ofetch",
       "ufo"
     ]
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "contributors": [
     "Intevel <github@conner-bachmann.de>",
@@ -35,12 +41,12 @@
     "dist"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build build",
+    "prepack": "nuxt-module-build build --stub",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
-    "docs": "cd docs && pnpm dev",
-    "release": "nuxt-module-build build && pnpm publish",
+    "docs": "cd docs && npm run dev",
+    "release": "nuxt-module-build build && npm publish",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
