@@ -7,6 +7,7 @@ import {
   addServerImportsDir,
   createResolver,
   defineNuxtModule,
+  addServerHandler,
   installModule,
 } from '@nuxt/kit'
 import { joinURL } from 'ufo'
@@ -17,6 +18,7 @@ import type {
   ModulePrivateRuntimeConfig,
   ModulePublicRuntimeConfig,
 } from './runtime/types/module-options'
+import type { IncomingMessage, ServerResponse } from 'http'
 
 export type * from './runtime/types'
 
@@ -148,6 +150,16 @@ export default defineNuxtModule<ModuleOptions>({
 
     addImportsDir(resolve(runtimeDir, 'composables'))
     addServerImportsDir(resolve(runtimeDir, 'server', 'utils'))
+
+    addServerHandler({
+      route: '/hello-world',
+      handler: resolve('./runtime/server/auth-handler.ts')
+      // handler: (_req: IncomingMessage, _res: ServerResponse): string => {
+      //   // res.setHeader('Content-Type', 'application/json')
+      //   // res.end(JSON.stringify({ msg: 'hello world' }))
+      //   return 'ttt'
+      // }
+    })
 
     // Enable Directus inside Nuxt Devtools
     if (directus.moduleConfig.devtools) {

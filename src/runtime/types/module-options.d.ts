@@ -156,7 +156,7 @@ export interface ModulePublicRuntimeConfig {
        */
       redirectTo?: string
       /**
-       * A blacklist of paths that needs authentication to be accessed.
+       * A whitelist of paths that needs authentication to be accessed. Supports ending with '*' as simple wildcards
        * @default ['']
        * @type string[]
        */

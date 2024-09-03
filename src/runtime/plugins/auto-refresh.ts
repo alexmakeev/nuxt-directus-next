@@ -49,7 +49,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     else {
       const cookie = getHeader(event, 'cookie')
 
+      console.log('SERVER:', cookie);
       if (cookie) {
+        console.log('REFRESHING ON SERVER')
         const res = await $fetch.raw<{ data: AuthenticationData }>('/auth/refresh', {
           body: {
             mode: 'cookie',
@@ -78,23 +80,24 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       if (mode === 'json' as AuthenticationMode && !refreshTokenCookie().value) {
         return
       }
+      console.log('REFRESHING ON CLIENT')
       await refresh().catch(_e => null)
     })
   }
 
-  console.log({enableMiddleware, toArray});
   if (enableMiddleware) {
     addRouteMiddleware(middlewareName, (to, _from) => {
-      console.log(toArray, to.path);
-      const restricted = !toArray.length || !toArray.find((p) => to.path.indexOf(p) !== -1);
+      const restricted = !toArray.length || !toArray.find((p) => p.endsWith('*') ? to.path.indexOf(p.substring(0,p.length-1)) === 0 : to.path === p); // TODO: support regexp wild cards
 
       if (!user.value && to.path !== redirectTo && restricted) {
-        if (import.meta.client && !nuxtApp.isHydrating) {
-          return abortNavigation()
-        }
-        else {
-          return navigateTo(redirectTo)
-        }
+        return navigateTo(redirectTo)
+        //
+        // if (import.meta.client && !nuxtApp.isHydrating) {
+        //   return abortNavigation()
+        // }
+        // else {
+        //   return navigateTo(redirectTo)
+        // }
       }
     }, {
       global,
