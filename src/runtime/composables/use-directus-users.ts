@@ -12,7 +12,7 @@ import {
   updateUser as sdkUpdateUser,
   updateUsers as sdkUpdateUsers,
   deleteUser as sdkDeleteUser,
-  deleteUsers as sdkDeleteUsers,
+  deleteUsers as sdkDeleteUsers, AuthenticationMode,
 } from '@directus/sdk'
 import type {
   DirectusUser,
@@ -108,7 +108,8 @@ export function useDirectusUsers<TSchema>(config?: Partial<DirectusRestConfig>) 
   >(
     query?: TQuery & { updateState?: boolean },
   ): SDKReturn<ReadUserOutput<TSchema, TQuery>> {
-    if (tokens.value?.access_token) {
+    const { mode } = useRuntimeConfig().public.directus.authConfig as { mode: AuthenticationMode }
+    if (tokens.value?.access_token || ((tokens.value?.expires > 0) && mode === 'session')) {
       const { updateState, ..._query } = defu(query, readMeQuery)
       try {
         const userData = await client.request(sdkReadMe(_query))

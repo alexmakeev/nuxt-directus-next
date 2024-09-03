@@ -25,6 +25,7 @@ import { useRuntimeConfig } from '#imports'
  * @returns createDirectus.
  */
 export const useDirectus = <T = any>(options?: Partial<DirectusClientOptions>): DirectusClient<T> => {
+  console.log('Init Server useDirectus!');
   const { url } = useRuntimeConfig().public.directus
 
   const defaultOptions: DirectusClientOptions = {
@@ -52,6 +53,7 @@ export const useDirectus = <T = any>(options?: Partial<DirectusClientOptions>): 
  * @returns A Directus REST client.
  */
 export const useDirectusRest = <T = any>(options?: Partial<Omit<DirectusRestConfig, 'authConfig'>>): DirectusClient<T> & RestClient<T> & StaticTokenClient<T> => {
+  console.log('Init Server useDirectusRest!');
   const { staticToken: privateToken } = useRuntimeConfig().directus
 
   const defaultOptions: Partial<Omit<DirectusRestConfig, 'authConfig'>> = {

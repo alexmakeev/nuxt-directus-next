@@ -11,6 +11,7 @@ import {
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   console.log('Defining Nuxt-Directus Plugin')
+  console.log('MODULE CONFIG:', useRuntimeConfig().public.directus.moduleConfig)
   const {
     url: baseURL,
     authConfig: {
@@ -49,9 +50,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     else {
       const cookie = getHeader(event, 'cookie')
 
-      console.log('SERVER:', cookie);
       if (cookie) {
-        console.log('REFRESHING ON SERVER')
         const res = await $fetch.raw<{ data: AuthenticationData }>('/auth/refresh', {
           body: {
             mode: 'cookie',

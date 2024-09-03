@@ -18,7 +18,6 @@ import type {
   ModulePrivateRuntimeConfig,
   ModulePublicRuntimeConfig,
 } from './runtime/types/module-options'
-import type { IncomingMessage, ServerResponse } from 'http'
 
 export type * from './runtime/types'
 
@@ -44,18 +43,25 @@ export default defineNuxtModule<ModuleOptions>({
       cookieHttpOnly: false,
       cookieSameSite: 'lax',
       cookieSecure: true,
+      authProxyPath: '/auth-proxy'
     },
     moduleConfig: {
       devtools: false,
       autoImport: false,
       autoImportPrefix: 'sdk',
       autoImportSuffix: '',
+      loginRequiredMiddleware: {
+        middlewareName: 'directus-login-required-middleware',
+        redirectTo: '/login',
+        publicPaths: [],
+        global: true
+      },
       autoRefresh: {
         enableMiddleware: false,
         global: true,
         middlewareName: 'directus-auth-middleware',
         redirectTo: '/login',
-        to: [''],
+        to: ['']
       },
       nuxtImage: {
         useAuthToken: false,
@@ -92,8 +98,15 @@ export default defineNuxtModule<ModuleOptions>({
         cookieHttpOnly: options.authConfig.cookieHttpOnly,
         cookieSameSite: options.authConfig.cookieSameSite,
         cookieSecure: options.authConfig.cookieSecure,
+        authProxyPath: options.authConfig.authProxyPath
       },
       moduleConfig: {
+        loginRequiredMiddleware: options.moduleConfig.loginRequiredMiddleware && {
+          middlewareName: options.moduleConfig.loginRequiredMiddleware.middlewareName,
+          redirectTo: options.moduleConfig.loginRequiredMiddleware.redirectTo,
+          publicPaths: options.moduleConfig.loginRequiredMiddleware.publicPaths,
+          global: options.moduleConfig.loginRequiredMiddleware.global,
+        },
         autoRefresh: options.moduleConfig.autoRefresh && {
           enableMiddleware: options.moduleConfig.autoRefresh.enableMiddleware,
           global: options.moduleConfig.autoRefresh.global,
@@ -142,6 +155,14 @@ export default defineNuxtModule<ModuleOptions>({
       provider: 'nuxt-directus',
     })
 
+    console.log('MODULE CONFIG:', directusPublic.moduleConfig)
+    if (directusPublic.moduleConfig.loginRequiredMiddleware !== false) {
+      console.log('ADDING LOGIN-REQUIRED')
+      addPlugin({
+        src: resolve(runtimeDir, 'plugins', 'login-required'),
+      }, { append: true })
+    }
+
     if (directusPublic.moduleConfig.autoRefresh !== false) {
       addPlugin({
         src: resolve(runtimeDir, 'plugins', 'auto-refresh'),
@@ -152,13 +173,8 @@ export default defineNuxtModule<ModuleOptions>({
     addServerImportsDir(resolve(runtimeDir, 'server', 'utils'))
 
     addServerHandler({
-      route: '/hello-world',
+      route: directusPublic.authConfig.authProxyPath,
       handler: resolve('./runtime/server/auth-handler.ts')
-      // handler: (_req: IncomingMessage, _res: ServerResponse): string => {
-      //   // res.setHeader('Content-Type', 'application/json')
-      //   // res.end(JSON.stringify({ msg: 'hello world' }))
-      //   return 'ttt'
-      // }
     })
 
     // Enable Directus inside Nuxt Devtools

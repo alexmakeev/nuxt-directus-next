@@ -112,7 +112,13 @@ export interface ModulePublicRuntimeConfig {
      * @default true
      * @type boolean | undefined
      */
-    cookieSecure?: boolean | undefined
+    cookieSecure?: boolean | undefined,
+    /**
+     * Auth Proxy path to create proxy end-point for silent auth checks (no 400 errors client spamming)
+     * @default '/auth-proxy'
+     * @type string | undefined
+     */
+    authProxyPath?: string
   }
   /**
    * A series of configs that let you define how the module should be used by Nuxt.
@@ -125,6 +131,38 @@ export interface ModulePublicRuntimeConfig {
      * @type Query<any, DirectusUser<any>> & { updateState?: boolean }
      */
     readMeQuery?: Query<any, DirectusUser<any>> & { updateState?: boolean }
+
+    /**
+     * Middleware to check if person is logged in or might be redirected to some login/register/forbidden page
+     * @default object
+     * @type object or false
+     */
+    loginRequiredMiddleware?: {
+      /**
+       * The name of the middleware.
+       * @default 'directus-login-required-middleware'
+       * @type string
+       */
+      middlewareName?: string
+      /**
+       * The redirect path for unauthenticated users.
+       * @default '/login'
+       * @type string
+       */
+      redirectTo?: string
+      /**
+       * A whitelist of paths that don't need authentication to be accessed. Supports ending with '*' as simple wildcards
+       * @default []
+       * @type string[]
+       */
+      publicPaths?: string[],
+      /**
+       * Sets the middleware as global, validating all routes.
+       * @default true
+       * @type boolean
+       */
+      global?: boolean
+    }
     /**
      * Configurations to automatically refresh the access token and user data.
      * @default object
@@ -156,7 +194,7 @@ export interface ModulePublicRuntimeConfig {
        */
       redirectTo?: string
       /**
-       * A whitelist of paths that needs authentication to be accessed. Supports ending with '*' as simple wildcards
+       * A blacklist of paths that needs authentication to be accessed.
        * @default ['']
        * @type string[]
        */
