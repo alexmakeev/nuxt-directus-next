@@ -7,7 +7,6 @@ import {
 } from '#imports'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-  console.log('Defining LoginRequired Plugin')
   const {
     middlewareName,
     redirectTo,
@@ -23,7 +22,11 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       const restricted = !publicPaths.length || !publicPaths.find((p: string) => p.endsWith('*') ? to.path.indexOf(p.substring(0,p.length-1)) === 0 : to.path === p); // TODO: support regexp wild cards
 
       if (!user.value) {
-        await refresh();
+        try { // TODO: Implement server auth-handler proxy to give code 200 even if no user logged in.
+          await refresh();
+        } catch (e) {
+          console.log('User not logged in.')
+        }
       }
       if (!user.value && to.path !== redirectTo && restricted) {
         return navigateTo(redirectTo)

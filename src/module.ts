@@ -155,9 +155,7 @@ export default defineNuxtModule<ModuleOptions>({
       provider: 'nuxt-directus',
     })
 
-    console.log('MODULE CONFIG:', directusPublic.moduleConfig)
     if (directusPublic.moduleConfig.loginRequiredMiddleware !== false) {
-      console.log('ADDING LOGIN-REQUIRED')
       addPlugin({
         src: resolve(runtimeDir, 'plugins', 'login-required'),
       }, { append: true })

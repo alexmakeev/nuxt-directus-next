@@ -129,13 +129,6 @@ export function useDirectusAuth<TSchema>(config?: Partial<DirectusRestConfig>) {
 
     const authResponse = await client.request(sdkRefresh(mode ?? defaultMode, token))
 
-    // console.log('CHECK:',mode ?? defaultMode === 'session', !!authResponse.expires, (authResponse.expires > 0))
-    // if ((mode ?? defaultMode) === 'session' && !!authResponse.expires && (authResponse.expires > 0)) {
-    //   authResponse.access_token = 'has-in-cookies';
-    // }
-    // console.log('sdKRefresh response:', authResponse);
-    // console.log({updateStates, updateTokens, readMe})
-
     if (updateStates !== false) {
       if (updateTokens !== false) {
         await setTokens(authResponse ?? null)

@@ -24,8 +24,6 @@ import { useRuntimeConfig } from '#imports'
  * @returns createDirectus.
  */
 export const useDirectus = <T = any>(options?: DirectusClientOptions): DirectusClient<T> => {
-  console.log('Init Client useDirectus!');
-  console.error('STACK')
   const { url } = useRuntimeConfig().public.directus
 
   const config = defu(options, {
@@ -62,7 +60,6 @@ export const useDirectus = <T = any>(options?: DirectusClientOptions): DirectusC
  * @returns A Directus REST client.
  */
 export const useDirectusRest = <T = any>(options?: DirectusRestConfig): DirectusClients.Rest<T> => {
-  console.log('Init Client useDirectusRest!');
   const { mode } = useRuntimeConfig().public.directus.authConfig as { mode: AuthenticationMode }
 
   const config = defu<
@@ -80,7 +77,6 @@ export const useDirectusRest = <T = any>(options?: DirectusRestConfig): Directus
     },
   })
 
-  console.log('Using Directus With REST auto-Auth:', mode, config.authConfig)
   return useDirectus<T>(config?.options)
     .with(authentication(mode, config.authConfig))
     .with(rest(config?.restConfig));
@@ -92,7 +88,6 @@ export const useDirectusRest = <T = any>(options?: DirectusRestConfig): Directus
  * @returns A Directus GraphQL client.
  */
 export const useDirectusGraphql = <T = any>(options?: DirectusGraphqlConfig): DirectusClients.Graphql<T> => {
-  console.log('Init Client useDirectusGraphQL!');
   const { mode } = useRuntimeConfig().public.directus.authConfig as { mode: AuthenticationMode }
 
   const config = defu<
@@ -121,7 +116,6 @@ export const useDirectusGraphql = <T = any>(options?: DirectusGraphqlConfig): Di
  * @returns A Directus Realtime client.
  */
 export const useDirectusRealtime = <T = any>(options?: DirectusRealtimeConfig): DirectusClients.Realtime<T> => {
-  console.log('Init Client useDirectusRealtime!');
   const { mode } = useRuntimeConfig().public.directus.authConfig as { mode: AuthenticationMode }
 
   const config = defu<

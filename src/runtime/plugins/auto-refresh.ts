@@ -10,8 +10,6 @@ import {
 } from '#imports'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-  console.log('Defining Nuxt-Directus Plugin')
-  console.log('MODULE CONFIG:', useRuntimeConfig().public.directus.moduleConfig)
   const {
     url: baseURL,
     authConfig: {
@@ -79,24 +77,21 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       if (mode === 'json' as AuthenticationMode && !refreshTokenCookie().value) {
         return
       }
-      console.log('REFRESHING ON CLIENT')
       await refresh().catch(_e => null)
     })
   }
 
   if (enableMiddleware) {
     addRouteMiddleware(middlewareName, (to, _from) => {
-      const restricted = !toArray.length || !toArray.find((p) => p.endsWith('*') ? to.path.indexOf(p.substring(0,p.length-1)) === 0 : to.path === p); // TODO: support regexp wild cards
+      const restricted = (!toArray.length || !!toArray.find((p: string) => p === to.path))
 
       if (!user.value && to.path !== redirectTo && restricted) {
-        return navigateTo(redirectTo)
-        //
-        // if (import.meta.client && !nuxtApp.isHydrating) {
-        //   return abortNavigation()
-        // }
-        // else {
-        //   return navigateTo(redirectTo)
-        // }
+        if (import.meta.client && !nuxtApp.isHydrating) {
+          return abortNavigation()
+        }
+        else {
+          return navigateTo(redirectTo)
+        }
       }
     }, {
       global,
