@@ -54,7 +54,7 @@ export default defineNuxtModule<ModuleOptions>({
         middlewareName: 'directus-login-required-middleware',
         redirectTo: '/login',
         publicPaths: [],
-        global: true
+        global: false
       },
       autoRefresh: {
         enableMiddleware: false,
