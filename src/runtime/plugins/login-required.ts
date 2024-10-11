@@ -29,7 +29,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         }
       }
       if (!user.value && to.path !== redirectTo && restricted) {
-        return navigateTo(redirectTo)
+		return navigateTo({ path: redirectTo, query: { next: to.path } });
       }
     }, {
       global
