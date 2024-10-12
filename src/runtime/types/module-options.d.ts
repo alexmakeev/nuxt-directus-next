@@ -112,7 +112,7 @@ export interface ModulePublicRuntimeConfig {
      * @default true
      * @type boolean | undefined
      */
-    cookieSecure?: boolean | undefined,
+    cookieSecure?: boolean | undefined
     /**
      * Auth Proxy path to create proxy end-point for silent auth checks (no 400 errors client spamming)
      * @default '/auth-proxy'
@@ -155,7 +155,7 @@ export interface ModulePublicRuntimeConfig {
        * @default []
        * @type string[]
        */
-      publicPaths?: string[],
+      publicPaths?: string[]
       /**
        * Sets the middleware as global, validating all routes.
        * @default true

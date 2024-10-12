@@ -170,10 +170,10 @@ export default defineNuxtModule<ModuleOptions>({
     addImportsDir(resolve(runtimeDir, 'composables'))
     addServerImportsDir(resolve(runtimeDir, 'server', 'utils'))
 
-    addServerHandler({
-      route: directusPublic.authConfig.authProxyPath,
-      handler: resolve('./runtime/server/auth-handler.ts')
-    })
+    // addServerHandler({
+    //   route: directusPublic.authConfig.authProxyPath,
+    //   handler: resolve('./runtime/server/auth-handler.ts')
+    // })
 
     // Enable Directus inside Nuxt Devtools
     if (directus.moduleConfig.devtools) {

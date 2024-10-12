@@ -4,10 +4,10 @@ import { useDirectusAuth } from '../composables/use-directus-auth'
 import {
   abortNavigation,
   addRouteMiddleware,
-  defineNuxtPlugin,
   navigateTo,
   useRuntimeConfig,
 } from '#imports'
+import { defineNuxtPlugin } from "nuxt/app"
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const {

@@ -1,12 +1,12 @@
 import { useDirectusAuth } from '../composables/use-directus-auth'
 import {
   addRouteMiddleware,
-  defineNuxtPlugin,
   navigateTo,
   useRuntimeConfig,
 } from '#imports'
+import { defineNuxtPlugin } from "nuxt/app"
 
-export default defineNuxtPlugin(async (nuxtApp) => {
+export default defineNuxtPlugin(async (_nuxtApp) => {
   const {
     middlewareName,
     redirectTo,
